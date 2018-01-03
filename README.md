@@ -19,6 +19,7 @@ The webpage included is a Map with all the Magic Towns from Mexico
 - JQuery.js
 - Knockout.js
 - Google Maps API
+- Wikipedia API
 
 ###Future Improvements
 
