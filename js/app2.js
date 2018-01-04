@@ -29,12 +29,27 @@ function ViewModel() {
         var wikiRequestTimeOut = setTimeout(function() {
           $wikiElem = 'failed to get wikipedia resources';
         }, 8000);
-
+        // Using the core $.ajax() method
         $.ajax({
-          url: wikiUrl,
-          dataType: "jsonp",
-          success: function(response) {
-            var articleList = response[1];
+
+            // The URL for the request
+            url: wikiUrl,
+
+            // The data to send (will be converted to a query string)
+            data: {
+                id: 123
+            },
+
+            // Whether this is a POST or GET request
+            type: "GET",
+
+            // The type of data we expect back
+            dataType : "jsonp",
+        })
+          // Code to run if the request succeeds (is done);
+          // The response is passed to the function
+          .done(function( json ) {
+            var articleList = json[1];
             for (var i = 0; i < articleList.length; i++) {
               articleStr = articleList[i];
               var url = 'https://en.wikipedia.org/wiki/' + articleStr;
@@ -42,8 +57,18 @@ function ViewModel() {
             }
             infoWindow.setContent(self.titleContent + '<hr>' + self.wikiTitle + $wikiElem);
             clearTimeout(wikiRequestTimeOut);
-          }
-        });
+          })
+          // Code to run if the request fails; the raw request and
+          // status codes are passed to the function
+          .fail(function() {
+            alert( "Sorry, there was a problem!" );
+          })
+          // Code to run regardless of success or failure;
+          .always(function() {
+            console.log( "The request is complete!" );
+          });
+
+
         self.wikiTitle = '<h3>Relevant Wikipedia Links</h3>';
         self.titleContent = '<div>' + marker.city + '<div>';
         infoWindow.open(map, marker);
